@@ -11,6 +11,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include "helper_functions.h"
 
 struct Particle {
@@ -119,7 +120,15 @@ class ParticleFilter {
   bool is_initialized;
   
   // Vector of weights of all particles
-  std::vector<double> weights; 
+  std::vector<double> weights;
+
+  static std::vector<LandmarkObs> toMapCoordinates(const Particle& p, std::vector<LandmarkObs> observations);
+  static std::vector<LandmarkObs> predictLandmarks(const Particle& p, Map map_landmarks, double sensor_range);
+  static double calculateWeight(
+    const std::vector<LandmarkObs>& observations, 
+    std::map<int, Map::single_landmark_s>& id_to_landmark, 
+    double std_x, double std_y
+  );
 };
 
 #endif  // PARTICLE_FILTER_H_
